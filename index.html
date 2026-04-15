@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>租兴兴 · 智能机器人租赁 | 科技感官网</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #050b1a;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, 'Poppins', sans-serif;
+            color: #eef5ff;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        .tech-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: radial-gradient(circle at 20% 30%, #0a1028, #030617);
+        }
+
+        .tech-bg::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.08) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .glow-orb {
+            position: fixed;
+            width: 60vmax;
+            height: 60vmax;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 180, 255, 0.15) 0%, rgba(0, 30, 80, 0) 70%);
+            top: -20%;
+            right: -20%;
+            z-index: -1;
+            filter: blur(60px);
+            animation: floatGlow 12s infinite alternate;
+        }
+
+        .glow-orb2 {
+            left: -15%;
+            bottom: -10%;
+            top: auto;
+            background: radial-gradient(circle, rgba(255, 60, 172, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+            animation-duration: 18s;
+        }
+
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+            100% { transform: translate(5%, 5%) scale(1.2); opacity: 0.8; }
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(5, 11, 26, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            min-height: 80px;
+        }
+
+        .logo {
+            font-size: 1.9rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #FFFFFF, #0cf, #7a2eff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 12px rgba(0, 204, 255, 0.4);
+        }
+
+        .logo span {
+            font-weight: 300;
+            font-size: 1rem;
+            background: none;
+            color: #0cf;
+            text-shadow: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 42px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #ccf4ff;
+            font-weight: 500;
+            font-size: 1.05rem;
+            transition: 0.3s;
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #0cf;
+            text-shadow: 0 0 6px #0cf;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: linear-gradient(90deg, #0cf, #a55eff);
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover::after, .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .btn-rental {
+            background: linear-gradient(95deg, #0a6cff, #b014ff);
+            border: none;
+            padding: 10px 28px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.25s;
+            box-shadow: 0 0 12px rgba(0, 108, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        .btn-rental:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 22px #0cf;
+            background: linear-gradient(95deg, #1a7cff, #c02aff);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 32px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 85vh;
+            gap: 40px;
+            padding: 40px 0 80px;
+        }
+
+        .hero-left {
+            flex: 1.2;
+        }
+
+        .hero-badge {
+            background: rgba(0, 204, 255, 0.2);
+            backdrop-filter: blur(8px);
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            border-left: 3px solid #0cf;
+            margin-bottom: 24px;
+            letter-spacing: 1px;
+        }
+
+        .hero-left h1 {
+            font-size: 3.8rem;
+            font-weight: 800;
+            line-height: 1.2;
+            background: linear-gradient(145deg, #ffffff, #7bc5ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .hero-left p {
+            font-size: 1.2rem;
+            color: #b9e2ff;
+            max-width: 550px;
+            margin-bottom: 32px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 32px;
+            margin-top: 28px;
+        }
+        .stat-item h3 {
+            font-size: 2rem;
+            color: #0cf;
+        }
+        .stat-item p {
+            font-size: 0.9rem;
+            color: #8bb5d0;
+        }
+
+        .hero-right {
+            flex: 0.9;
+            background: rgba(12, 25, 55, 0.6);
+            backdrop-filter: blur(12px);
+            border-radius: 48px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            padding: 24px;
+            box-shadow: 0 25px 40px rgba(0,0,0,0.5);
+            transition: transform 0.3s;
+        }
+
+        .hero-right:hover {
+            transform: translateY(-8px);
+            border-color: #0cf;
+        }
+
+        .robot-preview-img {
+            width: 100%;
+            border-radius: 32px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #102544, #010514);
+        }
+        .robot-preview-img img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+        .robot-preview-img:hover img {
+            transform: scale(1.02);
+        }
+        .robot-feature {
+            font-size: 0.85rem;
+            background: #0a102ecc;
+            padding: 10px 16px;
+            border-radius: 40px;
+            margin-top: 15px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+
+        .solutions-section {
+            margin: 70px 0 60px;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .section-title span {
+            background: linear-gradient(120deg, #0cf, #c26eff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .solutions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 35px;
+        }
+        .solution-card {
+            background: rgba(6, 15, 35, 0.65);
+            backdrop-filter: blur(8px);
+            border-radius: 32px;
+            padding: 24px;
+            border: 1px solid rgba(0, 204, 255, 0.2);
+            transition: all 0.3s;
+            text-align: center;
+        }
+        .solution-card:hover {
+            border-color: #0cf;
+            box-shadow: 0 0 28px rgba(0, 204, 255, 0.2);
+            transform: translateY(-6px);
+        }
+        .solution-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 24px;
+            margin-bottom: 18px;
+        }
+        .solution-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #fff, #0cf);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .solution-card p {
+            color: #bdd4ff;
+            font-size: 0.95rem;
+        }
+
+        /* 立即体验板块 */
+        .experience-section {
+            background: linear-gradient(135deg, #0b112f, #02061a);
+            border-radius: 64px;
+            padding: 60px 48px;
+            margin: 70px 0;
+            border: 1px solid #2f3f7e;
+        }
+        .experience-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 48px;
+            justify-content: space-between;
+        }
+        .experience-left, .experience-right {
+            flex: 1;
+            min-width: 260px;
+            text-align: center;
+        }
+        .experience-left h3, .experience-right h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            background: linear-gradient(120deg, #fff, #0cf);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .experience-desc {
+            color: #cce4ff;
+            line-height: 1.6;
+            margin-bottom: 28px;
+            font-size: 1rem;
+        }
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 32px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(0,204,255,0.3);
+        }
+        .qr-img {
+            width: 180px;
+            height: 180px;
+            background: white;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            box-shadow: 0 0 20px rgba(0,204,255,0.3);
+        }
+        .qr-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 16px;
+        }
+        .qr-label {
+            font-size: 0.9rem;
+            color: #0cf;
+            letter-spacing: 1px;
+        }
+
+        /* 新闻资讯板块 */
+        .news-section {
+            margin: 70px 0 60px;
+        }
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 35px;
+        }
+        .news-card {
+            background: rgba(6, 15, 35, 0.65);
+            backdrop-filter: blur(8px);
+            border-radius: 32px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 204, 255, 0.2);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .news-card:hover {
+            border-color: #0cf;
+            box-shadow: 0 0 28px rgba(0, 204, 255, 0.2);
+            transform: translateY(-6px);
+        }
+        .news-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .news-card:hover .news-img {
+            transform: scale(1.03);
+        }
+        .news-content {
+            padding: 24px;
+        }
+        .news-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #fff, #0cf);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .news-date {
+            font-size: 0.85rem;
+            color: #0cf;
+            margin-bottom: 12px;
+            display: inline-block;
+            border-left: 2px solid #0cf;
+            padding-left: 10px;
+        }
+        .news-desc {
+            color: #bdd4ff;
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-content {
+            background: linear-gradient(145deg, #0a1438, #030617);
+            border-radius: 48px;
+            max-width: 750px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 1px solid rgba(0, 204, 255, 0.5);
+            box-shadow: 0 0 50px rgba(0, 204, 255, 0.3);
+            animation: modalFadeIn 0.3s ease;
+        }
+        @keyframes modalFadeIn {
+            from {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        .modal-header {
+            padding: 28px 32px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 204, 255, 0.3);
+        }
+        .modal-header h2 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #fff, #0cf);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .close-modal {
+            font-size: 2rem;
+            cursor: pointer;
+            color: #0cf;
+            transition: 0.2s;
+            line-height: 1;
+        }
+        .close-modal:hover {
+            color: #fff;
+            text-shadow: 0 0 8px #0cf;
+        }
+        .modal-body {
+            padding: 24px 32px 32px;
+        }
+        .modal-img {
+            width: 100%;
+            border-radius: 32px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(0,204,255,0.3);
+        }
+        .modal-date {
+            color: #0cf;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            border-left: 3px solid #0cf;
+            padding-left: 12px;
+        }
+        .modal-full-text {
+            color: #d1e5ff;
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+        .modal-full-text p {
+            margin-bottom: 16px;
+        }
+
+        .about-section {
+            background: radial-gradient(ellipse at top, #0a1438, transparent);
+            border-radius: 56px;
+            padding: 50px 40px;
+            margin: 40px 0;
+            border: 1px solid rgba(0, 255, 200, 0.2);
+            text-align: center;
+        }
+        .about-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 24px;
+            background: linear-gradient(120deg, #fff, #0cf);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .about-section p {
+            max-width: 900px;
+            margin: 0 auto 20px;
+            color: #cce4ff;
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+        .about-stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            margin-top: 32px;
+            flex-wrap: wrap;
+        }
+        .about-stat {
+            text-align: center;
+        }
+        .about-stat .number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #0cf;
+        }
+        .about-stat .label {
+            font-size: 0.9rem;
+            color: #8bb5d0;
+        }
+
+        footer {
+            border-top: 1px solid rgba(0, 255, 255, 0.2);
+            padding: 40px 0 30px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            font-size: 0.85rem;
+            color: #7f99cc;
+        }
+
+        @media (max-width: 900px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 24px;
+            }
+            .nav-links {
+                gap: 28px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .hero-left h1 {
+                font-size: 2.6rem;
+            }
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+            .hero-stats {
+                justify-content: center;
+            }
+            .container {
+                padding: 0 24px;
+            }
+            .experience-section {
+                padding: 40px 24px;
+            }
+            .modal-header h2 {
+                font-size: 1.4rem;
+            }
+        }
+        .corner-glow {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(0,200,255,0.1) 0%, rgba(0,0,0,0) 80%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px;
+        }
+    </style>
+</head>
+<body>
+<div class="tech-bg"></div>
+<div class="glow-orb"></div>
+<div class="glow-orb glow-orb2"></div>
+<div class="corner-glow"></div>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo">租兴兴<span>™</span></div>
+        <ul class="nav-links">
+            <li><a href="#home" class="active">首页</a></li>
+            <li><a href="#solutions">解决方案</a></li>
+            <li><a href="#experience">立即体验</a></li>
+            <li><a href="#about">关于我们</a></li>
+            <li><a href="#news">新闻资讯</a></li>
+        </ul>
+        <button class="btn-rental" id="quickRentBtn">立即租赁 →</button>
+    </div>
+</nav>
+
+<div class="container">
+    <!-- Hero 区域 -->
+    <section class="hero" id="home">
+        <div class="hero-left">
+            <div class="hero-badge">⚡ 新一代智能机器人租赁平台</div>
+            <h1>用AI重新定义<br>机器人即服务</h1>
+            <p>租兴兴为企业提供全场景机器人灵活租赁方案，仓储物流、商业服务、迎宾讲解，一站式解决人力成本难题。</p>
+            <div class="hero-stats">
+                <div class="stat-item"><h3>500+</h3><p>企业客户</p></div>
+                <div class="stat-item"><h3>20+</h3><p>机器人品类</p></div>
+                <div class="stat-item"><h3>24/7</h3><p>专属支持</p></div>
+            </div>
+            <button class="btn-rental" style="margin-top: 28px; padding: 12px 36px; font-size: 1rem;" id="exploreBtn">探索解决方案 →</button>
+        </div>
+        <div class="hero-right">
+            <div class="robot-preview-img">
+                <img src="./images/banner.jpg" alt="智能机器人核心视觉" loading="lazy">
+            </div>
+            <div class="robot-feature">「租兴兴机器人」 搭载AI多模态感知</div>
+            <div style="margin-top: 12px; font-size: 0.8rem; color: #0cf; text-align: center;">日租低至 ¥3299 起</div>
+        </div>
+    </section>
+
+    <!-- 行业解决方案 -->
+    <div class="solutions-section" id="solutions">
+        <div class="section-title"><span>行业解决方案</span></div>
+        <div class="solutions-grid">
+            <div class="solution-card">
+                <img class="solution-img" src="./images/yanchu.jpg" alt="演艺表演">
+                <h3>演艺表演</h3>
+                <p>舞台表演、商业活动、庆典演出，定制化舞蹈与互动节目，引爆现场气氛。</p>
+            </div>
+            <div class="solution-card">
+                <img class="solution-img" src="./images/daolan.jpg" alt="智慧导览">
+                <h3>智慧导览</h3>
+                <p>博物馆、展厅、景区智能讲解，多语言导航，提升参观体验与科技感。</p>
+            </div>
+            <div class="solution-card">
+                <img class="solution-img" src="./images/xunjian.jpg" alt="工业巡检">
+                <h3>工业巡检</h3>
+                <p>园区、工厂、数据中心24小时自主巡检，异常报警，安全高效。</p>
+            </div>
+            <div class="solution-card">
+                <img class="solution-img" src="./images/peiban.jpg" alt="情感陪伴">
+                <h3>情感陪伴</h3>
+                <p>养老社区、儿童中心情感交互，健康监测与娱乐陪伴，温暖随行。</p>
+            </div>
+            <div class="solution-card">
+                <img class="solution-img" src="./images/yanxue.jpg" alt="研学互动">
+                <h3>研学互动</h3>
+                <p>AI教育套件，编程机器人教学，校企合作培养未来工程师。</p>
+            </div>
+            <div class="solution-card">
+                <img class="solution-img" src="./images/xingqu.jpg" alt="兴趣体验">
+                <h3>兴趣体验</h3>
+                <p>DIY套件、格斗机器人、无人机编队，激发科技兴趣与创造力。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 立即体验板块（使用真实二维码图片API） -->
+    <div class="experience-section" id="experience">
+        <div class="experience-wrapper">
+            <div class="experience-left">
+                <h3> 小程序体验</h3>
+                <div class="experience-desc">
+                    扫码进入租兴兴官方小程序，在线选型、一键下单、查看订单进度，租赁更便捷。
+                </div>
+                <div class="qr-container">
+                    <div class="qr-img">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://zuxinxinh5.heiedapp.top/mall/#/?i=100001" alt="小程序二维码">
+                    </div>
+                    <div class="qr-label">微信扫一扫 · 即刻体验</div>
+                </div>
+            </div>
+            <div class="experience-right">
+                <h3> 专属顾问</h3>
+                <div class="experience-desc">
+                    添加租兴兴官方客服微信，获取一对一咨询、专属报价与免费试用方案。
+                </div>
+                <div class="qr-container">
+                    <div class="qr-img">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://zuxingxing.com/wechat-consultant" alt="微信二维码">
+                    </div>
+                    <div class="qr-label">扫码添加微信 · 1对1服务</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 关于我们板块 -->
+    <div class="about-section" id="about">
+        <h2>关于租兴兴</h2>
+        <p>租兴兴成立于2026年，是中国领先的智能机器人租赁服务平台，致力于通过“机器人即服务”（RaaS）模式，降低企业智能化转型门槛。我们与全球顶尖机器人厂商深度合作，提供覆盖仓储物流、商业服务、教育娱乐等全场景的机器人租赁方案。</p>
+        <p>公司总部位于杭州，服务网络覆盖全国300+城市，已为超过500家企业提供高效、灵活的机器人租赁服务，助力客户实现降本增效与智能化升级。</p>
+        <div class="about-stats">
+            <div class="about-stat"><div class="number">500+</div><div class="label">企业客户</div></div>
+            <div class="about-stat"><div class="number">20+</div><div class="label">机器人品类</div></div>
+            <div class="about-stat"><div class="number">300+</div><div class="label">覆盖城市</div></div>
+            <div class="about-stat"><div class="number">24/7</div><div class="label">技术支持</div></div>
+        </div>
+    </div>
+
+    <!-- 新闻资讯板块 -->
+    <div class="news-section" id="news">
+        <div class="section-title"><span>新闻资讯</span></div>
+        <div class="news-grid">
+            <div class="news-card" data-news="1">
+                <img class="news-img" src="./images/xinwen1.jpg" alt="机器人租赁迎来生态级玩家">
+                <div class="news-content">
+                    <div class="news-title">机器人租赁迎来生态级玩家</div>
+                    <div class="news-date">2026年3月14日</div>
+                    <div class="news-desc">机器人租赁这门生意，2026年突然变得拥挤起来...</div>
+                </div>
+            </div>
+            <div class="news-card" data-news="2">
+                <img class="news-img" src="./images/xinwen2.jpg" alt="租兴兴正式亮相！港股大洋集团旗下机器人生态服务平台">
+                <div class="news-content">
+                    <div class="news-title">租兴兴正式亮相！港股大洋集团旗下机器人生态服务平台</div>
+                    <div class="news-date">2026年3月15日</div>
+                    <div class="news-desc">在AI与机器人技术全面爆发的时代，机器人租赁正成为机器人应用的核心交易模式。</div>
+                </div>
+            </div>
+            <div class="news-card" data-news="3">
+                <img class="news-img" src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=500&h=300&fit=crop" alt="智慧物流新方案发布">
+                <div class="news-content">
+                    <div class="news-title">智慧物流新方案：AGV集群调度系统上线</div>
+                    <div class="news-date">2026年3月20日</div>
+                    <div class="news-desc">全新智能调度平台实现多车协同作业，效率提升40%，首批已落地华东智能仓。</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div>© 2026 租兴兴科技 | 让机器人即服务成为企业新动力</div>
+        <div>智能租赁 · 极速部署 · 全生命周期服务</div>
+    </footer>
+</div>
+
+<!-- 模态框结构 -->
+<div id="newsModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalTitle">新闻标题</h2>
+            <span class="close-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <img id="modalImage" class="modal-img" src="" alt="新闻图片">
+            <div id="modalDate" class="modal-date"></div>
+            <div id="modalFullText" class="modal-full-text"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // 新闻详细数据
+        const newsData = {
+            1: {
+                title: "机器人租赁迎来生态级玩家——港股大洋集团旗下租兴兴亮相，首创分时共享模式",
+                date: "2026年3月14日",
+                image: "./images/xinwen1.jpg",
+                fullText: `<p>机器人租赁这门生意，2026年突然变得拥挤起来。</p>
+                           <p>全国机器人租赁相关公司在2025年新注册的已超过1500家，同比增长超48%。但热闹之下，绝大多数中小企业依然租不起、用不上——高峰期人形机器人租赁日租金动辄万元以上，一机难求，让大量真实需求卡在门外。</p>
+                           <p>就在这个时候，记者注意到一个不寻常的入场者——杭州灵芯机器人科技旗下机器人生态服务平台租兴兴进入公众视野。租兴兴是一家集租赁、售卖、场景解决方案研发于一体的平台。据了解，租兴兴通过自主研发的机器人分时共享系统，能将具备复杂表演能力的人形机器人日租金从5000元降至最低800元，并已完成六大核心应用场景的完整方案开发与真实场景验证。</p>
+	          <p>三十年港股上市集团，押注机器人生态服务</p>
+	         <p>与市场上多数新兴租赁平台不同，灵芯机器人科技背后站着的是香港主板上市公司大洋集团(01991.HK)。
+大洋集团在港股经营三十年，旗下拥有百亿级供应链体系，资金结构长期稳健。面对机器人AI产业浪潮，集团以全资孵化的方式直接入局——成立灵芯机器人科技。</p>
+	         <p>据了解，灵芯机器人科技的核心团队汇聚了来自浙江大学、中国科学院、哈尔滨工业大学的技术人才，以及国内头部机器人企业的行业经验。租兴兴CEO刘达表示，团队从2025年9月正式启动项目，半年内完成了平台研发、六大场景方案落地与定点城市试点验证，试点用户满意度数据超过98%。</p>
+	         <p>首创分时共享系统“机拼拼”，行业定价模式正在被重新定义</p>
+	         <p>租兴兴方面透露，目前机器人租赁市场上租赁一台会跳舞会对话的人形机器人日租金约5000元，但是租兴兴通过分时共享模式可将价格降至最低800元，核心就是依托自主研发的机拼拼系统，智能分时调度让同一台机器人一天内服务多组客户，单台设备日均使用价值充分释放。对合作客户而言，可以帮助他们降低设备闲置率、快速打开当地市场、获取更多租赁订单。据了解，这套系统目前已完成技术开发并进入实际运营阶段。</p>
+	          <p>数百人团队历时一年，自研AI系统达国内领先水平</p>
+	          <p>支撑租兴兴稳定运营的技术核心，是灵芯自主研发的芯弦AI系统。据租兴兴方面透露，该系统由数百人规模的研发团队历时近一年打磨完成，在多项关键技术指标上处于国内商用机器人领域的前沿水平。该系统采用全链路自研架构，从大语言模型到视觉模型，从导航算法到运动控制，均由团队自主研发。导航层面实现高精度建图与动态避障，机器人可在陌生环境中自主完成路径规划。运动控制方面，自研算法可支撑单机到200台规模的机器人集群协同。在架构设计上，系统兼容多品牌机器人租赁本体，并提供可视化场景编排功能，降低部署门槛。目前，芯弦AI系统已完成百套以上商用部署，智慧导览服务超100万人次，覆盖4S店、学校、银行、化工园区、特高压变电站等多个行业场景。</p>
+	        <p>租兴兴CEO刘达表示，芯弦AI系统的研发投入是灵芯在技术层面最核心的布局之一，底层系统的稳定性与技术厚度，直接决定了平台在多场景高频交付中的服务上限。</p>
+	        <p>半年完成六大场景验证，每套方案独立可交付</p>
+	        <p>据了解，平台目前已在机器人演艺表演、智慧导览、研学、工业巡检、兴趣、情感陪伴六大核心方向，完成解决方案的开发与真实场景部署验证。客户无需额外技术投入，直接对接需求即可启动。</p>
+	       <p>租兴兴运营人员透露，六大场景的验证是平台进入规模化推广阶段的重要基础，接下来平台还将持续向更多垂直场景延伸，进一步扩大机器人生态服务的行业覆盖边界。</p>
+	       <p>租金下探 + 场景验证，机器人租赁市场迎来规模化拐点</p>
+	       <p>目前机器人租赁市场已从早期概念炒作阶段转向场景落地，单纯硬件出租模式正在被淘汰，能够提供全链路交付能力的平台正在成为市场主流。在此背景下，能同时把成本打下来、把交付做扎实、并具备自研技术等综合能力的平台依然稀缺。记者注意到，租兴兴是目前少数几个将机器人租赁日租金从5000元降至800元，并同时具备上述能力的平台。多位行业观察者表示，当机器人日租金进入普通企业可承受区间，行业规模化爆发拐点或将加速到来。</p>`
+            },
+            2: {
+                title: "租兴兴正式亮相！港股大洋集团旗下机器人生态服务平台，首创分时共享模式重构行业壁垒",
+                date: "2026年3月15日",
+                image: "./images/xinwen2.jpg",
+                fullText: `<p>在AI与机器人技术全面爆发的时代，机器人租赁正成为机器人应用的核心交易模式。万亿级市场已经打开，但真正打通场景落地与持续运营的机器人租赁平台依然稀缺。</p>
+                           <p>集机器人租赁·售卖·场景解决方案研发于一体的机器人生态服务平台——「租兴兴」以生态级模式正式切入机器人租赁赛道，凭借港股上市集团大洋集团(01991.HK)三十年产业积累与百亿级供应链体系、自研芯弦AI系统全链路技术底座、行业首创“机拼拼”分时共享模式，半年完成六大场景验证与全链路技术打磨，平台已进入规模化市场推广阶段。</p>
+                           <p>一、港股上市集团三十年产业积淀，全资押注机器人生态服务</p>
+		<p>真正的顶级资本，从不追风口，只押注刚需、万亿、可构建绝对壁垒的终极赛道。
+
+大洋集团，香港主板上市公司，港股经营三十年，旗下拥有成熟的百亿级供应链体系，资金结构长期稳健。</p>
+		<p>2025年起，集团战略全面转向AI与机器人赛道，先后推出AI智能硬件项目及AI陪伴机器人，全资孵化了杭州灵芯机器人科技公司。</p>
+		<p>灵芯机器人科技核心团队，汇聚了来自浙江大学、中国科学院、哈尔滨工业大学的顶尖技术人才，以及国内头部机器人企业的一线行业经验。2025年9月正式立项，半年内完成平台研发、六大场景方案全面落地、定点城市试点验证，试点用户满意度高达98%以上。</p>
+		<p>租兴兴是灵芯机器人科技旗下的机器人生态服务平台，平台集租赁、售卖、场景解决方案研发于一体。企业提出需求后，平台负责设备选型、场景定制、现场部署到持续运维，交付的是一套可以直接投入使用的完整方案。从设备供给到场景落地，从技术支持到售后保障，每一个环节都在租兴兴的体系内闭环运行。</p>
+		<p>二、全栈自研芯弦AI系统，顶级技术底座构筑平台护城河</p>
+		<p>机器人租赁平台的核心竞争力，在于技术底座的厚度。
+
+租兴兴平台上所有机器人，均由灵芯自研的芯弦AI系统驱动。该系统由数百人研发团队打磨完成，采用全链路自研架构——从大语言模型到视觉模型，从导航算法到运动控制，全部自主研发。</p>
+		<p>全栈自研双大模型：面向具身智能场景化落地，语音-视觉-动作全链路多模态交互，支持多语种多音色、拟人化动作与主动导览 
+成熟SLAM算法：激光雷达+SLAM高精度建图导航，动态避障与路径重规划 
+自研运动控制算法：2-200台机器人集群协同，四足集群市占率行业领先，多次完成大型活动现场群体表演 
+一体化即插即用：兼容多品牌本体，可视化场景编排，非技术人员也能定制任务流 
+工业级巡检方案：宇树B2机器狗已在化工园区、高层建筑、特高压变电站等高危场景常态化部署
+人脸识别与个性化服务：精准识别熟人与陌生人，联动主动迎宾、个性化讲解与定制动作执行</p>
+		<p>芯弦AI系统已完成百套以上商用部署，智慧导览服务超过100万人次，覆盖4S店、学校、银行、化工园区、特高压变电站等多个行业场景。</p>
+		<p>未来芯弦AI系统向跨场景自主学习、主动预判需求、多机协同等方向持续迭代，这一技术壁垒还将不断加深。</p>
+		<p>三、半年完成六大场景验证，规模化推广全面启动</p>
+		<p>依托顶级资源赋能与顶尖团队的高速执行，租兴兴用半年时间，完成了六大核心场景的完整方案开发与真实场景验证。</p>
+		<p>【表演场景】商场开业、展会活动、品牌发布会——机器人自主完成迎宾、表演、互动全流程，成为现场最具科技感的品牌窗口。</p>
+		<p>【导览场景】4S店、博物馆、企业展厅——机器人自主导航至指定点位，进行多语种个性化讲解，支持人脸识别区分熟人与陌生人，2分钟无互动自动返回导览点。</p>
+		<p>【研学场景】学校、科技馆、研学基地——机器人作为AI教学助手，将课本知识转化为可感知、可互动的科技体验。</p>
+		<p>【巡检场景】化工园区、高层建筑、特高压变电站——机器人替代人工执行全天候、高精度巡检任务，已在多个高危场景投入常态化运营。</p>
+		<p>【兴趣场景】健身、网球等运动场景的智能辅助，为运动爱好者提供交互式训练体验。</p>
+		<p>【陪伴场景】搭载柔性电子皮肤（精度达0.1mm级，超越人类触觉阈值）与仿生微表情的情感仿真机器人，具备多维感知能力，面向情感陪伴需求人群，目前已进入产品化阶段。</p>
+		<p>六大场景覆盖机器人租赁最核心的应用方向，每套方案均可独立交付。客户无需额外技术投入，提出需求，租兴兴交付一套可以直接投入使用的完整方案。</p>
+		<p>四、首创机拼拼分时共享系统，凭借颠覆性商业模式重构行业定价逻辑</p>
+		<p>技术打通了场景，成本仍是横在中小企业面前的一道坎。
+
+传统机器人租赁模式下，一台会灵活跳舞的人形机器人一天只能服务一个客户，日租金在5000元左右。</p>
+		<p>我们自主研发的机拼拼系统，是一套行业首创的机器人分时共享模式。通过智能调度，同一台机器人在同一天可以被拆分为多个服务时段，由不同客户依次预约使用。单台机器人的日均使用效率成倍提升，机器人租赁价格由此降至最低800元。 对代理商而言，可以借助机拼拼系统快速打开当地市场、获取更多租赁订单。该系统目前已完成技术开发并进入实际运营阶段。</p>
+		<p>自研技术打通场景，机拼拼系统打破成本门槛——两条线同时推进，这就是租兴兴生态级模式的完整闭环。</p>
+		<p>五、规模化推广全面启动，抢占万亿机器人生态赛道制高点</p>
+		<p>依托港股上市集团顶级资源赋能与芯弦AI系统的持续技术驱动，租兴兴已确立清晰的增长路径与宏大战略蓝图：
+
+当下：六大场景全面验证完毕，平台正式进入规模化市场推广阶段，全国城市布局加速推进；
+中期：持续向更多垂直场景延伸，构建覆盖全国核心城市的机器人生态服务网络，成为行业标准的制定者；
+长期：以生态级模式重新定义机器人服务赛道，推动机器人真正走进千家万户、赋能千行百业，抢占万亿级机器人生态赛道的核心制高点。</p>
+		<p>租兴兴CEO刘达表示："通过租兴兴平台和机拼拼系统，我们要让机器人更快地服务于千家万户，赋能千行百业。技术是根，生态是翼，我们会持续投入加速推进。"</p>
+		<p>2026年，AI机器人产业硬件成本持续下降，大模型能力快速迭代，政策层面支持力度不断加大，机器人租赁行业正加速从硬件销售向服务交付转型。 作为集租赁、售卖、场景解决方案研发为一体的综合性机器人生态服务平台，租兴兴将持续深耕技术、拓展场景，致力于成为中国极具影响力的机器人产业生态平台</p>
+<p>关注「租兴兴」，与我们一起，见证机器人服务生态的新时代。</p>`
+            },
+            3: {
+                title: "智慧物流新方案：AGV集群调度系统上线",
+                date: "2026年3月20日",
+                image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&h=500&fit=crop",
+                fullText: `<p>租兴兴正式发布全新AGV集群调度系统，支持多车协同、动态路径规划与实时监控，可提升仓储物流效率40%以上。该系统已率先在华东某智能仓落地应用，运行稳定，客户反馈良好。</p>
+                           <p>该系统采用云端调度+边缘计算架构，支持租赁客户按需部署，无需一次性投入巨额自动化改造成本。租兴兴物流解决方案负责人表示：“通过租赁模式+智能调度系统，企业可以像用水用电一样灵活使用机器人。”</p>
+                           <p>下一步，租兴兴计划将该系统推广至全国主要物流节点城市，助力企业实现柔性供应链升级。</p>`
+            }
+        };
+
+        // 模态框元素
+        const modal = document.getElementById('newsModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalImage = document.getElementById('modalImage');
+        const modalDate = document.getElementById('modalDate');
+        const modalFullText = document.getElementById('modalFullText');
+        const closeBtn = document.querySelector('.close-modal');
+
+        function openModal(newsId) {
+            const data = newsData[newsId];
+            if (!data) return;
+            modalTitle.innerText = data.title;
+            modalImage.src = data.image;
+            modalDate.innerText = data.date;
+            modalFullText.innerHTML = data.fullText;
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        // 绑定新闻卡片点击事件
+        document.querySelectorAll('.news-card').forEach(card => {
+            const newsId = card.getAttribute('data-news');
+            if (newsId) {
+                card.addEventListener('click', () => openModal(newsId));
+            }
+        });
+
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('show')) closeModal(); });
+
+        // 导航栏高亮及滚动
+        const sections = {
+            home: document.getElementById('home'),
+            solutions: document.getElementById('solutions'),
+            experience: document.getElementById('experience'),
+            about: document.getElementById('about'),
+            news: document.getElementById('news')
+        };
+        const navLinksMap = {
+            home: document.querySelector('.nav-links a[href="#home"]'),
+            solutions: document.querySelector('.nav-links a[href="#solutions"]'),
+            experience: document.querySelector('.nav-links a[href="#experience"]'),
+            about: document.querySelector('.nav-links a[href="#about"]'),
+            news: document.querySelector('.nav-links a[href="#news"]')
+        };
+        function removeActiveClass() {
+            Object.values(navLinksMap).forEach(link => link && link.classList.remove('active'));
+        }
+        function setActiveById(id) {
+            removeActiveClass();
+            if (navLinksMap[id]) navLinksMap[id].classList.add('active');
+        }
+        window.addEventListener('scroll', () => {
+            const scrollPos = window.scrollY + 100;
+            let current = null;
+            for (const [key, sec] of Object.entries(sections)) {
+                if (sec && sec.offsetTop <= scrollPos && sec.offsetTop + sec.offsetHeight > scrollPos) {
+                    current = key;
+                    break;
+                }
+            }
+            if (!current && window.innerHeight + window.scrollY >= document.body.scrollHeight - 50) current = 'news';
+            if (current) setActiveById(current);
+            else if (window.scrollY < 50) setActiveById('home');
+        });
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const id = link.getAttribute('href').substring(1);
+                const el = document.getElementById(id);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    removeActiveClass();
+                    link.classList.add('active');
+                    history.pushState(null, null, `#${id}`);
+                }
+            });
+        });
+        function showDemoAlert(msg) {
+            const toast = document.createElement('div');
+            toast.innerText = msg;
+            toast.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#0a102fe0;backdrop-filter:blur(16px);border:1px solid #0cf;color:#0cf;padding:14px 28px;border-radius:60px;font-weight:500;z-index:9999;font-size:1rem;box-shadow:0 0 20px rgba(0,204,255,0.4);';
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 2300);
+        }
+        document.getElementById('quickRentBtn')?.addEventListener('click', () => {
+            showDemoAlert(' 租赁咨询通道已开启 · 专属顾问将联系您');
+            document.getElementById('experience')?.scrollIntoView({ behavior: 'smooth' });
+        });
+        document.getElementById('exploreBtn')?.addEventListener('click', () => {
+            document.getElementById('solutions')?.scrollIntoView({ behavior: 'smooth' });
+            removeActiveClass();
+            document.querySelector('.nav-links a[href="#solutions"]')?.classList.add('active');
+        });
+        setActiveById('home');
+        // 鼠标跟随光效
+        let glow = document.createElement('div');
+        glow.style.cssText = 'position:fixed;width:300px;height:300px;background:radial-gradient(circle,rgba(0,180,255,0.08) 0%,rgba(0,0,0,0) 70%);pointer-events:none;border-radius:50%;z-index:0';
+        document.body.appendChild(glow);
+        document.addEventListener('mousemove', (e) => glow.style.transform = `translate(${e.clientX - 150}px, ${e.clientY - 150}px)`);
+    })();
+</script>
+</body>
+</html>
